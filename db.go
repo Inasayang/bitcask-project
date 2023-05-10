@@ -118,10 +118,14 @@ func (db *DB) loadIndexFromDataFiles() error {
 				Fid:    fileID,
 				Offset: offset,
 			}
+			var ok bool
 			if logRecord.Type == data.LogRecordDeleted {
-				db.idx.Delete(logRecord.Key)
+				ok = db.idx.Delete(logRecord.Key)
 			} else {
-				db.idx.Put(logRecord.Key, logRecordPos)
+				ok = db.idx.Put(logRecord.Key, logRecordPos)
+			}
+			if !ok {
+				return ErrIndexUpdateFailed
 			}
 			offset += size
 		}
@@ -231,4 +235,25 @@ func (d *DB) Get(key []byte) ([]byte, error) {
 		return nil, ErrKeyNotFound
 	}
 	return logRecord.Value, nil
+}
+func (db *DB) Delete(key []byte) error {
+	if len(key) == 0 {
+		return ErrKeyIsEmpty
+	}
+	if pos := db.idx.Get(key); pos == nil {
+		return nil
+	}
+	logRecord := &data.LogRecord{
+		Key:  key,
+		Type: data.LogRecordDeleted,
+	}
+	_, err := db.appendLogRecord(logRecord)
+	if err != nil {
+		return nil
+	}
+	ok := db.idx.Delete(key)
+	if !ok {
+		return ErrIndexUpdateFailed
+	}
+	return nil
 }
