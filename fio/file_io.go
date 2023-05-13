@@ -26,6 +26,13 @@ func (f *FileIO) Sync() error {
 func (f *FileIO) Close() error {
 	return f.fd.Close()
 }
+func (f *FileIO) Size() (int64, error) {
+	stat, err := f.fd.Stat()
+	if err != nil {
+		return 0, err
+	}
+	return stat.Size(), nil
+}
 
 func NewFileIOManager(fn string) (*FileIO, error) {
 	fd, err := os.OpenFile(fn, os.O_CREATE|os.O_RDWR|os.O_APPEND, DataFilePerm)
