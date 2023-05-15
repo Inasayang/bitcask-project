@@ -1,5 +1,7 @@
 package kv
 
+import "os"
+
 type IndexerType = int8
 
 const (
@@ -12,4 +14,11 @@ type Options struct {
 	DataFileSize int64       // 数据文件大小
 	SyncWrites   bool        // 每次写是否持久化
 	IdxType      IndexerType //索引类型
+}
+
+var DefaultOptions = Options{
+	Dir:          os.TempDir(),
+	DataFileSize: 256 * 1024 * 1024,
+	SyncWrites:   false,
+	IdxType:      BTree,
 }
