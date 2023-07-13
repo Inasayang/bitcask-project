@@ -1,7 +1,7 @@
 package index
 
 import (
-	"github.com/Inasayang/kv/data"
+	"github.com/Inasayang/bitcask-project/data"
 	"github.com/google/btree"
 	"sync"
 )

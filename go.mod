@@ -1,4 +1,4 @@
-module github.com/Inasayang/kv
+module github.com/Inasayang/bitcask-project
 
 go 1.20
 

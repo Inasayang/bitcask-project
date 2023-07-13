@@ -9,8 +9,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/Inasayang/kv/data"
-	"github.com/Inasayang/kv/index"
+	"github.com/Inasayang/bitcask-project/data"
+	"github.com/Inasayang/bitcask-project/index"
 )
 
 // DB  存储引擎实例
