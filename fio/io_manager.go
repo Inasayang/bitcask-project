@@ -1,6 +1,6 @@
 package fio
 
-// Disk
+// 磁盘设计
 
 // IOManager 抽象 IO 管理接口，可以接入不同的 IO 类型，目前支持标准文件 IO
 type IOManager interface {

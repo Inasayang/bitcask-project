@@ -7,7 +7,7 @@ import (
 	"github.com/google/btree"
 )
 
-// Memory
+// 内存设计
 
 // Indexer 通用索引接口
 type Indexer interface {
@@ -41,6 +41,6 @@ type Item struct {
 	pos *data.LogRecordPos
 }
 
-func (ai *Item) Less(bi btree.Item) bool {
-	return bytes.Compare(ai.key, bi.(*Item).key) == -1
+func (i *Item) Less(bi btree.Item) bool {
+	return bytes.Compare(i.key, bi.(*Item).key) == -1
 }

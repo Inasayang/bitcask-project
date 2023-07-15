@@ -1,9 +1,10 @@
 package index
 
 import (
+	"sync"
+
 	"github.com/Inasayang/bitcask-project/data"
 	"github.com/google/btree"
-	"sync"
 )
 
 type BTree struct {
@@ -12,31 +13,28 @@ type BTree struct {
 }
 
 func (b *BTree) Put(key []byte, pos *data.LogRecordPos) bool {
-	it := &Item{key: key, pos: pos}
+	t := &Item{key: key, pos: pos}
 	b.lock.Lock()
-	b.tree.ReplaceOrInsert(it)
+	b.tree.ReplaceOrInsert(t)
 	b.lock.Unlock()
 	return true
 }
 
 func (b *BTree) Get(key []byte) *data.LogRecordPos {
-	it := &Item{key: key}
-	bit := b.tree.Get(it)
-	if bit == nil {
+	k := &Item{key: key}
+	t := b.tree.Get(k)
+	if t == nil {
 		return nil
 	}
-	return bit.(*Item).pos
+	return t.(*Item).pos
 }
 
 func (b *BTree) Delete(key []byte) bool {
-	it := &Item{key: key}
+	k := &Item{key: key}
 	b.lock.Lock()
-	oldItem := b.tree.Delete(it)
+	t := b.tree.Delete(k)
 	b.lock.Unlock()
-	if oldItem == nil {
-		return false
-	}
-	return true
+	return t!=nil
 }
 
 func NewBTree() *BTree {

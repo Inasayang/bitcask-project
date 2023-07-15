@@ -1,4 +1,4 @@
-package bitcask-project
+package bitcask
 
 import "os"
 
